@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
-  meta = with lib; {
+  meta = {
     description = "Performance monitoring tool for Linux";
     homepage = "https://team.inria.fr/pacap/software/tiptop";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 })
