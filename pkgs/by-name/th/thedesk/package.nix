@@ -5,56 +5,56 @@
   dpkg,
   autoPatchelfHook,
   makeWrapper,
-  electron,
   alsa-lib,
   gtk3,
   libxshmfence,
   libgbm,
+  libGL,
   nss,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "thedesk";
-  version = "24.2.1";
+  version = "25.0.15";
 
   src = fetchurl {
-    url = "https://github.com/cutls/TheDesk/releases/download/v${version}/${pname}_${version}_amd64.deb";
-    sha256 = "sha256-AdjygNnQ3qQB03cGcQ5EB0cY3XXWLrzfCqw/U8tq1Yo=";
+    url = "https://github.com/cutls/thedesk-next/releases/download/v${version}/thedesk-next_${version}_amd64.deb";
+    hash = "sha256-YSkxq53aNb/+154JNrp4MYteV0Ss5FbnXU0oT1T8CqM=";
   };
 
   nativeBuildInputs = [
-    dpkg
     autoPatchelfHook
+    dpkg
     makeWrapper
   ];
 
   buildInputs = [
     alsa-lib
     gtk3
-    libxshmfence
     libgbm
+    libGL
+    libxshmfence
     nss
   ];
 
-  dontBuild = true;
-  dontConfigure = true;
+  runtimeDependencies = [ systemd ];
 
   installPhase = ''
     runHook preInstall
 
-    mv usr $out
-    mv opt $out
-
-    # binary is not used and probably vulnerable to CVE(s)
-    rm $out/opt/TheDesk/thedesk
-
-    substituteInPlace $out/share/applications/thedesk.desktop \
-      --replace '/opt/TheDesk' $out/bin
-
-    makeWrapper ${electron}/bin/electron $out/bin/thedesk \
-      --add-flags $out/opt/TheDesk/resources/app.asar
+    substituteInPlace usr/share/applications/thedesk-next.desktop \
+      --replace-fail "/opt/TheDesk/thedesk-next" "thedesk"
+    cp --recursive usr $out
+    mkdir $out/libexec $out/bin
+    cp --recursive opt/TheDesk $out/libexec/thedesk
+    ln --symbolic $out/libexec/thedesk/thedesk-next $out/bin/thedesk
 
     runHook postInstall
+  '';
+
+  preFixup = ''
+    patchelf --add-needed libGL.so.1 $out/libexec/thedesk/thedesk-next
   '';
 
   meta = with lib; {
