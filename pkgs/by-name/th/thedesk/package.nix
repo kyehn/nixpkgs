@@ -57,11 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf --add-needed libGL.so.1 $out/libexec/thedesk/thedesk-next
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mastodon/Misskey Client for PC";
     homepage = "https://thedesk.top";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "thedesk";
