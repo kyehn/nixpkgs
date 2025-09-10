@@ -14,12 +14,12 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thedesk";
   version = "25.0.15";
 
   src = fetchurl {
-    url = "https://github.com/cutls/thedesk-next/releases/download/v${version}/thedesk-next_${version}_amd64.deb";
+    url = "https://github.com/cutls/thedesk-next/releases/download/v${finalAttrs.version}/thedesk-next_${finalAttrs.version}_amd64.deb";
     hash = "sha256-YSkxq53aNb/+154JNrp4MYteV0Ss5FbnXU0oT1T8CqM=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "thedesk";
   };
-}
+})
