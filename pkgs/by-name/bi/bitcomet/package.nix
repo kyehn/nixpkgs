@@ -7,7 +7,6 @@
   desktop-file-utils,
   dpkg,
   webkitgtk_4_0,
-  runScript ? "BitComet",
   writeShellScript,
   nix-update,
 }:
@@ -71,14 +70,11 @@ let
   };
 in
 buildFHSEnv {
-  inherit
-    pname
-    version
-    runScript
-    meta
-    ;
+  inherit pname version meta;
 
   executableName = "BitComet";
+
+  runScript = "BitComet";
 
   targetPkgs =
     pkgs:
@@ -103,5 +99,26 @@ buildFHSEnv {
       ${lib.getExe nix-update} pkgsCross.gnu64.bitcomet.bitcomet --version $latestVersion
       ${lib.getExe nix-update} pkgsCross.aarch64-multiplatform.bitcomet.bitcomet --version skip
     '';
+    bitcometd = buildFHSEnv {
+      pname = "bitcometd";
+      inherit version;
+
+      executableName = "bitcometd";
+
+      runScript = "bitcometd";
+
+      targetPkgs =
+        pkgs:
+        [
+          bitcomet
+        ]
+        ++ appimageTools.defaultFhsEnvArgs.targetPkgs pkgs;
+
+      multiPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
+
+      meta = meta // {
+        mainProgram = "bitcometd";
+      };
+    };
   };
 }
