@@ -4,20 +4,28 @@
   fetchFromGitHub,
   cmake,
   alsa-lib,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sof-tools";
-  version = "2.10";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "thesofproject";
     repo = "sof";
-    rev = "v${version}";
-    hash = "sha256-VmP0z3q1P8LqQ+ELZGkI7lEXGiMYdAPvS8Lbwv6dUyk=";
+    tag = "v${version}";
+    hash = "sha256-01jd14E4/jywrFz3pyvURDcMbvt8/j3TenzHBGtL730=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  postPatch = ''
+    patchShebangs ../scripts/gen-uuid-reg.py
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
   buildInputs = [ alsa-lib ];
   sourceRoot = "${src.name}/tools";
 
