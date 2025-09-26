@@ -29,12 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ alsa-lib ];
   sourceRoot = "${finalAttrs.src.name}/tools";
 
-  meta = with lib; {
+  meta = {
     description = "Tools to develop, test and debug SoF (Sund Open Firmware)";
     homepage = "https://thesofproject.github.io";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.johnazoidberg ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.johnazoidberg ];
     mainProgram = "sof-ctl";
   };
 })
