@@ -7,14 +7,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sof-tools";
   version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "thesofproject";
     repo = "sof";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-01jd14E4/jywrFz3pyvURDcMbvt8/j3TenzHBGtL730=";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     python3
   ];
   buildInputs = [ alsa-lib ];
-  sourceRoot = "${src.name}/tools";
+  sourceRoot = "${finalAttrs.src.name}/tools";
 
   meta = with lib; {
     description = "Tools to develop, test and debug SoF (Sund Open Firmware)";
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.johnazoidberg ];
     mainProgram = "sof-ctl";
   };
-}
+})
