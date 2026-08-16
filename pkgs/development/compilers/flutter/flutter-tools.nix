@@ -7,6 +7,7 @@
   writeTextFile,
   git,
   which,
+  xcbuild,
   dart,
   version,
   flutterSrc,
@@ -49,6 +50,9 @@ buildDartApplication.override { inherit dart; } {
   ''
   # Use arm64 instead of arm64e.
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Avoid any dependency on the host Xcode's /usr/bin/plutil.
+    substituteInPlace lib/src/ios/plist_parser.dart \
+      --replace-fail "/usr/bin/plutil" "${xcbuild}/bin/plutil"
     substituteInPlace lib/src/ios/xcodeproj.dart \
       --replace-fail arm64e arm64
   ''
@@ -65,6 +69,10 @@ buildDartApplication.override { inherit dart; } {
   nativeBuildInputs = [
     git
     which
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Provides plutil, referenced after the postPatch substitution.
+    xcbuild
   ];
   preConfigure = ''
     export HOME=.

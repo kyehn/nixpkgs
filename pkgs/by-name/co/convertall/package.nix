@@ -50,6 +50,8 @@ flutter341.buildFlutterApplication rec {
     maintainers = with lib.maintainers; [
       Luflosi
     ];
-    platforms = lib.platforms.linux;
+    # macOS desktop builds are supported by buildFlutterApplication through the
+    # nixpkgs built-in plugin layer (no CocoaPods); see build-flutter-application.nix.
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
