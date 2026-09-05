@@ -30,15 +30,15 @@ let
       categories = [ "Graphics" ];
     }
   );
-  version = "1.105.0";
+  version = "1.112.0";
 in
 appimageTools.wrapType2 {
   pname = "xnconvert";
   inherit version;
 
   src = fetchurl {
-    url = "https://download.xnview.com/old_versions/XnConvert/XnConvert-${version}.glibc2.17-x86_64.AppImage";
-    hash = "sha256-eWQSUVxR3G3XbwBCht6LW3t3/N668jH4UqK5OnRY0ko=";
+    url = "https://download.xnview.com/versions/XnConvert/XnConvert-${version}.glibc2.34-x86_64.AppImage";
+    hash = "sha256-E51yQJZ1XzJ8Q1Q6CEElHAPaWVkTaUKBc1UHssy9mjk=";
   };
 
   extraPkgs = pkgs: [
