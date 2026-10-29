@@ -50,9 +50,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_pgrep::test_pidfile"
     # pgrep: pattern that searches for process name longer than 15 characters will result in zero matches
     "--skip=test_pgrep::test_pool_workqueue_release"
-    # pgrep panics when a process exits while /proc is scanned, which makes this test flaky
-    "--skip=test_pgrep::test_ignore_case"
   ];
+
+  # ps and pgrep panic when a process exits while /proc is scanned, so the
+  # tests only fail when they run concurrently.
+  dontUseCargoParallelTests = true;
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
