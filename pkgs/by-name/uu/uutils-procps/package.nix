@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-procps";
-  version = "0.0.1-unstable-2026-10-07";
+  version = "0.0.1-unstable-2026-10-28";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "procps";
-    rev = "b536810e8746385e1862aa8e344821854e2fea79";
-    hash = "sha256-Y4DcrchhDaKjBfLZ8LncLPF3vLmBmRnHkSJWXidOJDs=";
+    rev = "45cfebff2c10f73cee4babf3d94a8b0f968c3733";
+    hash = "sha256-eTwuU75CCDNJ2R1G4vB+f5d4zBVBgcnAOjRaYB6g7b4=";
   };
 
-  cargoHash = "sha256-fOmB5YIK3UUFYyc46IdgXi3D3o02doRNIzPQsqPN4Ko=";
+  cargoHash = "sha256-0HjYZKTDkvMf10GIf2tOLIwQaK92JFbp/i7Sev9wu18=";
 
   cargoBuildFlags = [ "--workspace" ];
 
@@ -50,6 +50,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_pgrep::test_pidfile"
     # pgrep: pattern that searches for process name longer than 15 characters will result in zero matches
     "--skip=test_pgrep::test_pool_workqueue_release"
+    # pgrep panics when a process exits while /proc is scanned, which makes this test flaky
+    "--skip=test_pgrep::test_ignore_case"
   ];
 
   passthru.updateScript = nix-update-script {
